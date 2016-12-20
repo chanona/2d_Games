@@ -3,7 +3,7 @@ import random
 from pico2d import *
 
 
-class FixedBackground:
+class Background:
 
     def __init__(self):
         self.image = load_image('Resource/KPU_GROUND.png')

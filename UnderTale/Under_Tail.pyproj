@@ -31,7 +31,10 @@
     <Compile Include="frisk.py" />
     <Compile Include="game_framework.py" />
     <Compile Include="mygame.py" />
-    <Compile Include="scroll_state.py" />
+    <Compile Include="main_state.py" />
+    <Compile Include="title_state.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

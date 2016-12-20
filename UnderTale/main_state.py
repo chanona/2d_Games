@@ -4,10 +4,10 @@ import game_framework
 
 
 from frisk import Frisk # import Boy class from boy.py
-from background import FixedBackground as Background
+from background import Background
 
 
-name = "scroll_state"
+name = "main_state"
 
 pFrisk = None
 pBackGround = None
