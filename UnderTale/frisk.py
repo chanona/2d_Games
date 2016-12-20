@@ -13,24 +13,24 @@ class Frisk:
     print(RUN_SPEED_PPS)
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-    FRAMES_PER_ACTION = 8
+    FRAMES_PER_ACTION = 12
 
     image = None
 
-    LEFT_RUN, RIGHT_RUN, LEFT_STAND, RIGHT_STAND = 0, 1, 2, 3
+    DOWN_STAND, DOWN_RUN, LEFT_STAND, LEFT_RUN, RIGHT_STAND, RIGHT_RUN, UP_STAND, UP_RUN = 0,1,2,3,4,5,6,7
 
     def __init__(self):
         self.x, self.y = 1700, 300
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
-        self.frame = random.randint(0, 7)
+        self.frame = self.UP_STAND
         self.life_time = 0.0
         self.total_frames = 0.0
         self.xdir = 0
         self.ydir = 0
-        self.state = self.RIGHT_STAND
+        self.state = self.UP_STAND
         if Frisk.image == None:
-            Frisk.image = load_image('Resource/animation_sheet.png')
+            Frisk.image = load_image('Resource/Frisk_Animation.png')
 
 
     def set_background(self, bg):
@@ -41,7 +41,7 @@ class Frisk:
         self.life_time += frame_time
         distance = Frisk.RUN_SPEED_PPS * frame_time
         self.total_frames += Frisk.FRAMES_PER_ACTION * Frisk.ACTION_PER_TIME * frame_time
-        self.frame = int(self.total_frames) % 8
+        self.frame = int(self.total_frames) % 12
         self.x += (self.xdir * distance)
         self.y += (self.ydir * distance)
 
@@ -51,9 +51,13 @@ class Frisk:
 
         if self.xdir == -1: self.state = self.LEFT_RUN
         elif self.xdir == 1: self.state = self.RIGHT_RUN
+        elif self.ydir == -1: self.state = self.DOWN_RUN
+        elif self.ydir == 1: self.state = self.UP_RUN
         elif self.xdir == 0:
             if self.state == self.RIGHT_RUN: self.state = self.RIGHT_STAND
             elif self.state == self.LEFT_RUN: self.state = self.LEFT_STAND
+            elif self.state == self.DOWN_RUN: self.state = self.DOWN_STAND
+            elif self.state == self.UP_RUN: self.state = self.UP_STAND
 
 
     def draw(self):
@@ -71,9 +75,23 @@ class Frisk:
         sy = self.y - self.bg.window_bottom
         debug_print('x=%d, y=%d, sx=%d, sy=%d' % (self.x, self.y, sx, sy))
 
-        self.image.clip_draw(self.frame * 100, self.state * 100, 100, 100, sx, sy)
-
-
+        # 이동
+        if self.state == self.RIGHT_STAND:
+            self.image.clip_draw(clamp(6, self.frame, 6) * 20, 0, 20, self.image.h, sx, sy)
+        elif self.state == self.RIGHT_RUN:
+            self.image.clip_draw(clamp(6, self.frame, 7) * 20, 0, 20, self.image.h, sx, sy)
+        elif self.state == self.LEFT_STAND:
+            self.image.clip_draw(clamp(4, self.frame, 4) * 20, 0, 20, self.image.h, sx, sy)
+        elif self.state == self.LEFT_RUN:
+            self.image.clip_draw(clamp(4, self.frame, 5) * 20, 0, 20, self.image.h, sx, sy)
+        elif self.state == self.UP_STAND:
+            self.image.clip_draw(clamp(8, self.frame, 8) * 20, 0, 20, self.image.h, sx, sy)
+        elif self.state == self.UP_RUN:
+            self.image.clip_draw(clamp(8, self.frame, 11) * 20, 0, 20, self.image.h, sx, sy)
+        elif self.state == self.DOWN_STAND:
+            self.image.clip_draw(clamp(0, self.frame, 0) * 20, 0, 20, self.image.h, sx, sy)    
+        elif self.state == self.DOWN_RUN:
+            self.image.clip_draw(clamp(0, self.frame, 3) * 20, 0, 20, self.image.h, sx, sy) 
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())

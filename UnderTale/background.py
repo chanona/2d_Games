@@ -6,12 +6,12 @@ from pico2d import *
 class Background:
 
     def __init__(self):
-        self.image = load_image('Resource/KPU_GROUND.png')
+        self.image = load_image('Resource/spr_introimage_10.png')
         self.speed = 0
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
-        self.w = self.image.w
-        self.h = self.image.h
+        self.w = 800
+        self.h = 600
 
     def set_center_object(self, boy):
         self.center_object = boy
