@@ -28,6 +28,7 @@ class Frisk:
         self.total_frames = 0.0
         self.xdir = 0
         self.ydir = 0
+        self.scale = 2.0
         self.state = self.UP_STAND
         if Frisk.image == None:
             Frisk.image = load_image('Resource/Frisk_Animation.png')
@@ -77,21 +78,21 @@ class Frisk:
 
         # 이동
         if self.state == self.RIGHT_STAND:
-            self.image.clip_draw(clamp(6, self.frame, 6) * 20, 0, 20, self.image.h, sx, sy)
+            self.image.clip_draw(clamp(6, self.frame, 6) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)
         elif self.state == self.RIGHT_RUN:
-            self.image.clip_draw(clamp(6, self.frame, 7) * 20, 0, 20, self.image.h, sx, sy)
+            self.image.clip_draw(clamp(6, self.frame, 7) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)
         elif self.state == self.LEFT_STAND:
-            self.image.clip_draw(clamp(4, self.frame, 4) * 20, 0, 20, self.image.h, sx, sy)
+            self.image.clip_draw(clamp(4, self.frame, 4) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)
         elif self.state == self.LEFT_RUN:
-            self.image.clip_draw(clamp(4, self.frame, 5) * 20, 0, 20, self.image.h, sx, sy)
+            self.image.clip_draw(clamp(4, self.frame, 5) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)
         elif self.state == self.UP_STAND:
-            self.image.clip_draw(clamp(8, self.frame, 8) * 20, 0, 20, self.image.h, sx, sy)
+            self.image.clip_draw(clamp(8, self.frame, 8) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)
         elif self.state == self.UP_RUN:
-            self.image.clip_draw(clamp(8, self.frame, 11) * 20, 0, 20, self.image.h, sx, sy)
+            self.image.clip_draw(clamp(8, self.frame, 11) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)
         elif self.state == self.DOWN_STAND:
-            self.image.clip_draw(clamp(0, self.frame, 0) * 20, 0, 20, self.image.h, sx, sy)    
+            self.image.clip_draw(clamp(0, self.frame, 0) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale)    
         elif self.state == self.DOWN_RUN:
-            self.image.clip_draw(clamp(0, self.frame, 3) * 20, 0, 20, self.image.h, sx, sy) 
+            self.image.clip_draw(clamp(0, self.frame, 3) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 12 * self.scale, self.image.h * self.scale) 
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
