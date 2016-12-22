@@ -4,28 +4,50 @@ import game_framework
 
 
 from frisk import Frisk # import Boy class from boy.py
-from background import Background
-
+from background import Background, BlackRoom, BattleRoom
+from flowey import Flowey
+from talkwindow import TalkWindow
+from friskheart import FriskHeart
 
 name = "main_state"
 
 pFrisk = None
-pBackGround = None
+pStartRoom = None
+pBlackRoom = None
+pFlowey = None
+pTalkWindow = None
+pFriskHeart = None
+pBattleRoom = None
 
 def create_world():
-    global pFrisk, pBackGround
+    global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom
     pFrisk = Frisk()
-    pBackGround = Background()
+    pStartRoom = Background()
+    pBlackRoom = BlackRoom()
+    pFlowey = Flowey()
+    pTalkWindow = TalkWindow()
+    pFriskHeart = FriskHeart()
+    pBattleRoom = BattleRoom()
 
-    pBackGround.set_center_object(pFrisk)
-    pFrisk.set_background(pBackGround)
+    pStartRoom.set_center_object(pFrisk)
+    pFrisk.set_background(pStartRoom)
+    pFrisk.set_talkwindow(pTalkWindow)
+    pTalkWindow.set_player(pFrisk)
 
+def change_room(bg):
+    bg.set_center_object(pFrisk)
+    pFrisk.set_background(bg)
+    pFrisk.bRoomChange = False
 
 def destroy_world():
-    global pFrisk, pBackGround
+    global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom
     del(pFrisk)
-    del(pBackGround)
-
+    del(pStartRoom)
+    del(pBlackRoom)
+    del(pFlowey)
+    del(pTalkWindow)
+    del(pFriskHeart)
+    del(pBattleRoom)
 
 def enter():
     hide_cursor()
@@ -54,19 +76,43 @@ def handle_events(frame_time):
                 game_framework.quit()
             else:
                 pFrisk.handle_event(event)
-                pBackGround.handle_event(event)
-
+                if pFrisk.playerspot == pFrisk.START_ROOM:
+                    pStartRoom.handle_event(event)
+                if pFrisk.playerspot == pFrisk.BLACK_ROOM:
+                    pBlackRoom.handle_event(event)
+                    pFlowey.handle_event(event)
+                    if pFrisk.talkevent == pFrisk.BLACKROOM_FLOWEY:
+                        pTalkWindow.handle_event(event)
 
 
 def update(frame_time):
     pFrisk.update(frame_time)
-    pBackGround.update(frame_time)
 
+    if pFrisk.bRoomChange == True:
+        if pFrisk.playerspot == pFrisk.START_ROOM:
+            change_room(pStartRoom)
+        if pFrisk.playerspot == pFrisk.BLACK_ROOM:
+            change_room(pBlackRoom)
 
-
+    if pFrisk.playerspot == pFrisk.START_ROOM:
+        pStartRoom.update(frame_time)
+    elif pFrisk.playerspot == pFrisk.BLACK_ROOM:
+        pBlackRoom.update(frame_time)
+        pFlowey.update(frame_time)
+        if pFrisk.talkevent == pFrisk.BLACKROOM_FLOWEY:
+            pTalkWindow.update(frame_time)
+            pFlowey.state = pFlowey.TALK
+           
 def draw(frame_time):
     clear_canvas()
-    pBackGround.draw()
+    if pFrisk.playerspot == pFrisk.START_ROOM:
+        pStartRoom.draw()
+    elif pFrisk.playerspot == pFrisk.BLACK_ROOM:
+        pBlackRoom.draw()
+        pFlowey.draw()
+        if pFrisk.talkevent != pFrisk.NONE:
+            pTalkWindow.draw()
+
     pFrisk.draw()
     update_canvas()
 
