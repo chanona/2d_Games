@@ -21,6 +21,7 @@ class Frisk:
     DOWN_STAND, DOWN_RUN, LEFT_STAND, LEFT_RUN, RIGHT_STAND, RIGHT_RUN, UP_STAND, UP_RUN = 0,1,2,3,4,5,6,7
     START_ROOM, BLACK_ROOM, BATTLE_ROOM = 0, 1, 2
     NONE, BLACKROOM_FLOWEY = 0, 1
+    NONE, BT_FLOWEY = 0, 1
 
     def __init__(self):
         self.x, self.y = 430, 360
@@ -37,6 +38,7 @@ class Frisk:
         self.bRoomChange = False
         self.talkevent = self.NONE
         self.bBattle = False
+        self.BattleState = self.NONE
 
         if Frisk.image == None:
             Frisk.image = load_image('Resource/Frisk_Animation.png')
@@ -77,9 +79,13 @@ class Frisk:
             self.x = 400
             self.y = 50
         
-        if self.playerspot == self.BLACK_ROOM and self.y >= 200:
+        if self.playerspot == self.BLACK_ROOM and self.y >= 200 and self.tw.Floweytalkcnt <= 9:
             self.talkevent = self.BLACKROOM_FLOWEY
-
+        else:
+            if self.talkevent == self.BLACKROOM_FLOWEY and self.BattleState == self.NONE:
+                self.BattleState = self.BT_FLOWEY
+                self.talkevent = self.NONE
+            
     def draw(self):
         # x_left_offset = min(0, self.x - self.canvas_width//2)
         # x_right_offset = max(0, self.x - self.bg.w + self.canvas_width//2)

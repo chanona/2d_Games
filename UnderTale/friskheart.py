@@ -22,7 +22,7 @@ class FriskHeart:
     NONE, BLACKROOM_FLOWEY = 0, 1
 
     def __init__(self):
-        self.x, self.y = 430, 360
+        self.x, self.y = 400, 200
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
         self.frame = self.STAND
@@ -30,7 +30,9 @@ class FriskHeart:
         self.total_frames = 0.0
         self.xdir = 0
         self.ydir = 0
-        self.scale = 2.0
+        self.scale = 1.0
+        self.totalhp = 20
+        self.hp = 20
         self.state = self.STAND
         self.talkevent = self.NONE
 
@@ -45,14 +47,14 @@ class FriskHeart:
     def update(self, frame_time):
         if self.talkevent == self.NONE:
             self.life_time += frame_time
-            distance = Frisk.RUN_SPEED_PPS * frame_time
-            self.total_frames += Frisk.FRAMES_PER_ACTION * FriskHeart.ACTION_PER_TIME * frame_time
+            distance = FriskHeart.RUN_SPEED_PPS * frame_time
+            self.total_frames += FriskHeart.FRAMES_PER_ACTION * FriskHeart.ACTION_PER_TIME * frame_time
             self.frame = int(self.total_frames) % 2
             self.x += (self.xdir * distance)
             self.y += (self.ydir * distance)
 
-            self.x = clamp(0, self.x, self.bg.w)
-            self.y = clamp(0, self.y, self.bg.h)
+            #self.x = clamp(308, self.x, 490)
+            #self.y = clamp(125, self.y, 275)
 
 
         if self.xdir == -1: self.state = self.LEFT_RUN
@@ -60,7 +62,7 @@ class FriskHeart:
         elif self.ydir == -1: self.state = self.DOWN_RUN
         elif self.ydir == 1: self.state = self.UP_RUN
         elif self.xdir == 0:
-            self.state = self.RIGHT_STAND
+            self.state = self.STAND
 
     def draw(self):
         # x_left_offset = min(0, self.x - self.canvas_width//2)
@@ -73,11 +75,8 @@ class FriskHeart:
         # sx, sy : screen coord
         # screen_origin_x : map coord x of screen_origin
         # screen_origin_y : map coord y of screen_origin
-        sx = self.x - self.bg.window_left
-        sy = self.y - self.bg.window_bottom
-
-        # ¿Ãµø
-        self.image.clip_draw(clamp(1, self.frame, 1) * 20, 0, 20, self.image.h, sx, sy, self.image.w / 10 * self.scale, self.image.h * self.scale)
+        debug_print('x=%d, y=%d' % (self.x, self.y), 0, 255, 0)
+        self.image.clip_draw(clamp(1, self.frame, 1) * 16, 0, 16, self.image.h, self.x, self.y, self.image.w / 2 * self.scale, self.image.h * self.scale)
         
     def draw_bb(self):
         draw_rectangle(*self.get_bb())

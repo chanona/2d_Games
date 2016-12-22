@@ -42,6 +42,7 @@ class Flowey:
         distance = Flowey.RUN_SPEED_PPS * frame_time
         self.total_frames += Flowey.FRAMES_PER_ACTION * Flowey.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 2
+        
 
     def draw(self):
         # x_left_offset = min(0, self.x - self.canvas_width//2)

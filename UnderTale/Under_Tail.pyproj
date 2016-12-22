@@ -28,10 +28,19 @@
   <ItemGroup>
     <Compile Include="background.py" />
     <Compile Include="ball.py" />
+    <Compile Include="battleflowey.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="flowey.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="floweybullet.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="frisk.py" />
+    <Compile Include="gameover_state.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="game_framework.py" />
     <Compile Include="mygame.py" />
     <Compile Include="main_state.py" />

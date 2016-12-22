@@ -8,6 +8,8 @@ from background import Background, BlackRoom, BattleRoom
 from flowey import Flowey
 from talkwindow import TalkWindow
 from friskheart import FriskHeart
+from battleflowey import Battleflowey
+from floweybullet import Floweybullet
 
 name = "main_state"
 
@@ -18,9 +20,13 @@ pFlowey = None
 pTalkWindow = None
 pFriskHeart = None
 pBattleRoom = None
+pbattleflowey = None
+listFloweybullet = None
+pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5 = None,None,None,None,None
 
 def create_world():
-    global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom
+    global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom, pbattleflowey, listFloweybullet
+    global pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5
     pFrisk = Frisk()
     pStartRoom = Background()
     pBlackRoom = BlackRoom()
@@ -28,6 +34,9 @@ def create_world():
     pTalkWindow = TalkWindow()
     pFriskHeart = FriskHeart()
     pBattleRoom = BattleRoom()
+    pbattleflowey = Battleflowey()
+    pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5 = Floweybullet(200, 460),Floweybullet(300, 500),Floweybullet(400, 540),Floweybullet(500, 500), Floweybullet(600, 460)
+    listFloweybullet = [pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5]
 
     pStartRoom.set_center_object(pFrisk)
     pFrisk.set_background(pStartRoom)
@@ -40,7 +49,7 @@ def change_room(bg):
     pFrisk.bRoomChange = False
 
 def destroy_world():
-    global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom
+    global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom, pbattleflowey
     del(pFrisk)
     del(pStartRoom)
     del(pBlackRoom)
@@ -48,6 +57,7 @@ def destroy_world():
     del(pTalkWindow)
     del(pFriskHeart)
     del(pBattleRoom)
+    del(pbattleflowey)
 
 def enter():
     hide_cursor()
@@ -74,7 +84,7 @@ def handle_events(frame_time):
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
-            else:
+            elif pFrisk.BattleState == pFrisk.NONE:
                 pFrisk.handle_event(event)
                 if pFrisk.playerspot == pFrisk.START_ROOM:
                     pStartRoom.handle_event(event)
@@ -83,8 +93,10 @@ def handle_events(frame_time):
                     pFlowey.handle_event(event)
                     if pFrisk.talkevent == pFrisk.BLACKROOM_FLOWEY:
                         pTalkWindow.handle_event(event)
-
-
+            else:
+                pFriskHeart.handle_event(event)
+                pbattleflowey.handle_event(event)
+                
 def update(frame_time):
     pFrisk.update(frame_time)
 
@@ -102,18 +114,32 @@ def update(frame_time):
         if pFrisk.talkevent == pFrisk.BLACKROOM_FLOWEY:
             pTalkWindow.update(frame_time)
             pFlowey.state = pFlowey.TALK
-           
+                
+    if pFrisk.BattleState != pFrisk.NONE:
+        pFriskHeart.update(frame_time)
+        pBattleRoom.update(frame_time)
+        pbattleflowey.update(frame_time)
+        for bullet in listFloweybullet:
+            bullet.update(frame_time)
+     
 def draw(frame_time):
     clear_canvas()
-    if pFrisk.playerspot == pFrisk.START_ROOM:
-        pStartRoom.draw()
-    elif pFrisk.playerspot == pFrisk.BLACK_ROOM:
-        pBlackRoom.draw()
-        pFlowey.draw()
-        if pFrisk.talkevent != pFrisk.NONE:
-            pTalkWindow.draw()
 
-    pFrisk.draw()
+    if pFrisk.BattleState == pFrisk.NONE:
+        if pFrisk.playerspot == pFrisk.START_ROOM:
+            pStartRoom.draw()
+        elif pFrisk.playerspot == pFrisk.BLACK_ROOM:
+            pBlackRoom.draw()
+            pFlowey.draw()
+            if pFrisk.talkevent != pFrisk.NONE:
+                pTalkWindow.draw()
+        pFrisk.draw()
+    else:
+        pBattleRoom.draw()
+        pFriskHeart.draw()
+        pbattleflowey.draw()
+        for bullet in listFloweybullet:
+            bullet.draw()
     update_canvas()
 
 
