@@ -75,7 +75,7 @@ class FriskHeart:
         # sx, sy : screen coord
         # screen_origin_x : map coord x of screen_origin
         # screen_origin_y : map coord y of screen_origin
-        debug_print('x=%d, y=%d' % (self.x, self.y), 0, 255, 0)
+        #debug_print('x=%d, y=%d' % (self.x, self.y), 0, 255, 0)
         self.image.clip_draw(clamp(1, self.frame, 1) * 16, 0, 16, self.image.h, self.x, self.y, self.image.w / 2 * self.scale, self.image.h * self.scale)
         
     def draw_bb(self):

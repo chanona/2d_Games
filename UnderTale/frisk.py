@@ -99,7 +99,7 @@ class Frisk:
         # screen_origin_y : map coord y of screen_origin
         sx = self.x - self.bg.window_left
         sy = self.y - self.bg.window_bottom
-        debug_print('x=%d, y=%d, sx=%d, sy=%d' % (self.x, self.y, sx, sy), 0, 255, 0)
+        #debug_print('x=%d, y=%d, sx=%d, sy=%d' % (self.x, self.y, sx, sy), 0, 255, 0)
 
         # 이동
         if self.state == self.RIGHT_STAND:

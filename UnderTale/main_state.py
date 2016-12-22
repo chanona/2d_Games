@@ -26,12 +26,13 @@ pbattleflowey = None
 listFloweybullet = None
 pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5 = None,None,None,None,None
 bGameover = False
-
+bgm = None
 
 def create_world():
     global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom, pbattleflowey, listFloweybullet
     global pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5
     global bGameover
+    global bgm
     pFrisk = Frisk()
     pStartRoom = Background()
     pBlackRoom = BlackRoom()
@@ -42,7 +43,7 @@ def create_world():
     pbattleflowey = Battleflowey()
     pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5 = Floweybullet(200, 460),Floweybullet(300, 500),Floweybullet(400, 540),Floweybullet(500, 500), Floweybullet(600, 460)
     listFloweybullet = [pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5]
-
+        
     pStartRoom.set_center_object(pFrisk)
     pFrisk.set_background(pStartRoom)
     pFrisk.set_talkwindow(pTalkWindow)

@@ -7,14 +7,20 @@ import main_state
 
 name = "title_state"
 image = None
+bgm = None
 
 def enter():
-    global image
+    global image, bgm
     image = load_image('Resource//spr_undertaletitle_0.png')
+    bgm = load_music('Resource//mus_story.ogg')
+    bgm.set_volume(64)
+    bgm.repeat_play()
+
 
 def exit():
-    global image
+    global image, bgm
     del(image)
+    del(bgm)
 
 
 def pause():

@@ -19,7 +19,7 @@ class Floweybullet:
          
     def __init__(self, x, y):
         self.x, self.y = x, y
-        self.destx, self.desty = 0, 0
+        self.initx, self.inity = x, y
         self.scale = 1.0
         self.floweyframe = 0
         self.Totalfloweyframe = 0
@@ -27,8 +27,7 @@ class Floweybullet:
         self.player = None
         self.flowey = None
         self.bStart = False
-
-
+        
         if Floweybullet.image == None:
             Floweybullet.image = load_image('Resource/flowey_bullet.png')
 
@@ -43,14 +42,15 @@ class Floweybullet:
             elif self.x < self.player.x:
                 self.x += (distance) / 2
             self.y -= distance
-        
+
     def move(self, x, y):
         self.destx = x, self.desty = y   
 
-    def reset(self, x, y):
-        self.x = x
-        self.y = y
+    def reset(self):
+        self.x = self.initx
+        self.y = self.inity
         self.bAlive = False
+        self.flowey.bBattleStart = False
 
     def set_player(self, player):
         self.player = player
