@@ -53,8 +53,8 @@ class FriskHeart:
             self.x += (self.xdir * distance)
             self.y += (self.ydir * distance)
 
-            #self.x = clamp(308, self.x, 490)
-            #self.y = clamp(125, self.y, 275)
+            self.x = clamp(308, self.x, 490)
+            self.y = clamp(125, self.y, 275)
 
 
         if self.xdir == -1: self.state = self.LEFT_RUN
@@ -82,7 +82,7 @@ class FriskHeart:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x - 5, self.y - 5, self.x + 5, self.y + 5
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:

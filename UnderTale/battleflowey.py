@@ -31,6 +31,7 @@ class Battleflowey:
         self.Floweytalkcnt = 1 
         self.floweyframe = 0
         self.Totalfloweyframe = 0
+        self.bBattleStart = False;
 
         if Battleflowey.image == None:
             Battleflowey.image = load_image('Resource/spr_blconwdshrt_0.png')
@@ -91,6 +92,7 @@ class Battleflowey:
                     self.Line1, self.Line2, self.Line3, self.Line4 = 21,0,0,0
                 elif self.Floweytalkcnt == 8:
                     self.Line1, self.Line2, self.Line3, self.Line4 = 22,23,24,0
+                    self.bBattleStart = True
                 self.Floweytalkcnt +=1
                                   
                 

@@ -2,6 +2,8 @@ from pico2d import *
 
 import game_framework
 
+import title_state
+import gameover_state
 
 from frisk import Frisk # import Boy class from boy.py
 from background import Background, BlackRoom, BattleRoom
@@ -23,10 +25,13 @@ pBattleRoom = None
 pbattleflowey = None
 listFloweybullet = None
 pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5 = None,None,None,None,None
+bGameover = False
+
 
 def create_world():
     global pFrisk, pStartRoom, pBlackRoom, pFlowey, pTalkWindow, pFriskHeart, pBattleRoom, pbattleflowey, listFloweybullet
     global pFloweybullet1, pFloweybullet2, pFloweybullet3, pFloweybullet4, pFloweybullet5
+    global bGameover
     pFrisk = Frisk()
     pStartRoom = Background()
     pBlackRoom = BlackRoom()
@@ -42,6 +47,21 @@ def create_world():
     pFrisk.set_background(pStartRoom)
     pFrisk.set_talkwindow(pTalkWindow)
     pTalkWindow.set_player(pFrisk)
+    for bullet in listFloweybullet:
+        bullet.set_player(pFriskHeart)
+        bullet.set_flowey(pbattleflowey)
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
 
 def change_room(bg):
     bg.set_center_object(pFrisk)
@@ -99,13 +119,13 @@ def handle_events(frame_time):
                 
 def update(frame_time):
     pFrisk.update(frame_time)
-
+    global bGameover
     if pFrisk.bRoomChange == True:
         if pFrisk.playerspot == pFrisk.START_ROOM:
             change_room(pStartRoom)
         if pFrisk.playerspot == pFrisk.BLACK_ROOM:
             change_room(pBlackRoom)
-
+    
     if pFrisk.playerspot == pFrisk.START_ROOM:
         pStartRoom.update(frame_time)
     elif pFrisk.playerspot == pFrisk.BLACK_ROOM:
@@ -113,15 +133,23 @@ def update(frame_time):
         pFlowey.update(frame_time)
         if pFrisk.talkevent == pFrisk.BLACKROOM_FLOWEY:
             pTalkWindow.update(frame_time)
-            pFlowey.state = pFlowey.TALK
-                
+            pFlowey.state = pFlowey.TALK     
+                    
     if pFrisk.BattleState != pFrisk.NONE:
         pFriskHeart.update(frame_time)
         pBattleRoom.update(frame_time)
         pbattleflowey.update(frame_time)
         for bullet in listFloweybullet:
             bullet.update(frame_time)
-     
+        
+        for bullet in listFloweybullet:
+            if collide(pFriskHeart, bullet):
+                bGameover = True
+        
+    if bGameover == True:
+        game_framework.change_state(gameover_state)
+        bGameover = False
+
 def draw(frame_time):
     clear_canvas()
 
